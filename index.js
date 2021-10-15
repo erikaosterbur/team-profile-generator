@@ -5,8 +5,7 @@ const Manager = require('./lib/manager');
 const Engineer = require('./lib/engineer');
 const Intern = require('./lib/intern');
 
-let engineers = [];
-let interns = [];
+let finalHTML = '';
 
 function askManagerQuestions(){
     inquirer.prompt([
@@ -46,7 +45,7 @@ function askManagerQuestions(){
         else if (responses.role === "Intern"){
             askInternQuestions();
         }
-        else return          
+        else writeHTML(finalHTML);        
     })
 }
 
@@ -81,16 +80,14 @@ function askEngineerQuestions(){
     ])
     .then(responses => {
         const engineer = new Engineer (responses);
-        engineers.push(engineer);
-        engineers.forEach(engineerHTML(engineer));
-        finalHTML(engineerSection);
+        engineerHTML(engineer);
         if (responses.role === "Engineer"){
             askEngineerQuestions();
         }
         else if (responses.role === "Intern"){
             askInternQuestions();
         }
-        else return
+        else writeHTML(finalHTML);
     })
 }
 
@@ -125,89 +122,100 @@ function askInternQuestions(){
     ])
     .then(responses => {
         const intern = new Intern (responses);
-        interns.push(intern);
-        interns.forEach(internHTML(intern));
+        internHTML(intern);
         if (responses.role === "Engineer"){
             askEngineerQuestions();
         }
         else if (responses.role === "Intern"){
             askInternQuestions();
         }
-        else return
+        else writeHTML(finalHTML);
     })
 }
 
 function managerHTML(manager){
+    const managerName = manager.getName();
+    const managerRole = manager.getRole();
+    const managerId = manager.getId();
+    const managerEmail = manager.getEmail();
+    const managerOfficeNumber = manager.getOfficeNumber();
     let managerSection = `
-    <div class="card" style="width: 18rem;">
-        <div class="card-header">${manager.name}</div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">ID: ${manager.id}</li>
-                <li class="list-group-item">Email: ${manager.email}</li>
-                <li class="list-group-item">Office Number: ${manager.officeNumber}</li>
-            </ul>
-    </div>
-    `
-    finalHTML(managerSection);
-}
-
-function engineerHTML(engineer){
-    let engineerSection = `
-    <div class="card" style="width: 18rem;">
-        <div class="card-header">${engineer.name}</div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">ID: ${engineer.id}</li>
-                <li class="list-group-item">Email: ${engineer.email}</li>
-                <li class="list-group-item">GitHub Username: ${engineer.gitHub}</li>
-            </ul>
-    </div>
-    `
-    finalHTML(engineerSection);
-}
-
-function internHTML(intern){
-    let internSection = `
-    <div class="card" style="width: 18rem;">
-        <div class="card-header">${intern.name}</div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">ID: ${intern.id}</li>
-                <li class="list-group-item">Email: ${intern.email}</li>
-                <li class="list-group-item">GitHub Username: ${intern.gitHub}</li>
-            </ul>
-    </div>
-    `
-    finalHTML(internSection);
-}
-
-function finalHTML(managerSection, engineerSection, internSection){
-    let finalHTML = `
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <title>Our Team</title>
 </head>
 <body>
-    ${managerSection}
+    <div class="card" style="width: 18rem;">
+        <div class="card-header">${managerName}</div>
+        <h6 class="card-subtitle mb-2 text-muted">${managerRole}</h6>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">ID: ${managerId}</li>
+                <li class="list-group-item">Email: ${managerEmail}</li>
+                <li class="list-group-item">Office Number: ${managerOfficeNumber}</li>
+            </ul>
+    </div>
+    `
+    finalHTML += managerSection;
+}
 
-    ${engineerSection}
+function engineerHTML(engineer){
+    const engineerName = engineer.getName();
+    const engineerRole = engineer.getRole();
+    const engineerId = engineer.getId();
+    const engineerEmail = engineer.getEmail();
+    const engineerGitHub = engineer.getGitHub();
+    let engineerSection = `
+    <div class="card" style="width: 18rem;">
+        <div class="card-header">${engineerName}</div>
+        <h6 class="card-subtitle mb-2 text-muted">${engineerRole}</h6>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">ID: ${engineerId}</li>
+                <li class="list-group-item">Email: ${engineerEmail}</li>
+                <li class="list-group-item">GitHub Username: ${engineerGitHub}</li>
+            </ul>
+    </div>
+    `
+    finalHTML += engineerSection;
+}
 
-    ${internSection}  
+function internHTML(intern){
+    const internName = intern.getName();
+    const internRole = intern.getRole();
+    const internId = intern.getId();
+    const internEmail = intern.getEmail();
+    const internSchool = intern.getSchool();
+    let internSection = `
+    <div class="card" style="width: 18rem;">
+        <div class="card-header">${internName}</div>
+        <h6 class="card-subtitle mb-2 text-muted">${internRole}</h6>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">ID: ${internId}</li>
+                <li class="list-group-item">Email: ${internEmail}</li>
+                <li class="list-group-item">School: ${internSchool}</li>
+            </ul>
+    </div>
+    `
+    finalHTML += internSection;
+}
+
+function writeHTML(finalHTML){
+    let closingTags = `
 </body>
 </html>
     `
-    generateHTML(finalHTML);
-}
-
-function generateHTML(finalHTML){
+    finalHTML += closingTags;
     fs.writeFile("./dist/index.html", finalHTML, err => {
         err ? console.log("Error found, try again") : ("Success!")
         }
     )
 }
+
 
 function init(){
     askManagerQuestions();
