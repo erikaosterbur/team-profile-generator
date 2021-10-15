@@ -5,6 +5,9 @@ const Manager = require('./lib/manager');
 const Engineer = require('./lib/engineer');
 const Intern = require('./lib/intern');
 
+let engineers = [];
+let interns = [];
+
 function askManagerQuestions(){
     inquirer.prompt([
         {
@@ -36,18 +39,7 @@ function askManagerQuestions(){
     ])
     .then(responses => {
         const manager = new Manager (responses);
-        console.log(manager);
-        let managerSection = `
-        <div class="card" style="width: 18rem;">
-            <div class="card-header">${manager.name}</div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">ID: ${manager.id}</li>
-                    <li class="list-group-item">Email: ${manager.email}</li>
-                    <li class="list-group-item">Office Number: ${manager.officeNumber}</li>
-                </ul>
-        </div>
-        `
-        finalHTML(managerSection);
+        managerHTML(manager);
         if (responses.role === "Engineer"){
             askEngineerQuestions();
         }
@@ -89,17 +81,8 @@ function askEngineerQuestions(){
     ])
     .then(responses => {
         const engineer = new Engineer (responses);
-        console.log(engineer);
-        let engineerSection = `
-        <div class="card" style="width: 18rem;">
-            <div class="card-header">${engineer.name}</div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">ID: ${engineer.id}</li>
-                    <li class="list-group-item">Email: ${engineer.email}</li>
-                    <li class="list-group-item">GitHub Username: ${engineer.gitHub}</li>
-                </ul>
-        </div>
-        `
+        engineers.push(engineer);
+        engineers.forEach(engineerHTML(engineer));
         finalHTML(engineerSection);
         if (responses.role === "Engineer"){
             askEngineerQuestions();
@@ -142,18 +125,8 @@ function askInternQuestions(){
     ])
     .then(responses => {
         const intern = new Intern (responses);
-        console.log(intern);
-        let internSection = `
-        <div class="card" style="width: 18rem;">
-            <div class="card-header">${intern.name}</div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">ID: ${intern.id}</li>
-                    <li class="list-group-item">Email: ${intern.email}</li>
-                    <li class="list-group-item">GitHub Username: ${intern.gitHub}</li>
-                </ul>
-        </div>
-        `
-        finalHTML(internSection);
+        interns.push(intern);
+        interns.forEach(internHTML(intern));
         if (responses.role === "Engineer"){
             askEngineerQuestions();
         }
@@ -162,6 +135,48 @@ function askInternQuestions(){
         }
         else return
     })
+}
+
+function managerHTML(manager){
+    let managerSection = `
+    <div class="card" style="width: 18rem;">
+        <div class="card-header">${manager.name}</div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">ID: ${manager.id}</li>
+                <li class="list-group-item">Email: ${manager.email}</li>
+                <li class="list-group-item">Office Number: ${manager.officeNumber}</li>
+            </ul>
+    </div>
+    `
+    finalHTML(managerSection);
+}
+
+function engineerHTML(engineer){
+    let engineerSection = `
+    <div class="card" style="width: 18rem;">
+        <div class="card-header">${engineer.name}</div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">ID: ${engineer.id}</li>
+                <li class="list-group-item">Email: ${engineer.email}</li>
+                <li class="list-group-item">GitHub Username: ${engineer.gitHub}</li>
+            </ul>
+    </div>
+    `
+    finalHTML(engineerSection);
+}
+
+function internHTML(intern){
+    let internSection = `
+    <div class="card" style="width: 18rem;">
+        <div class="card-header">${intern.name}</div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">ID: ${intern.id}</li>
+                <li class="list-group-item">Email: ${intern.email}</li>
+                <li class="list-group-item">GitHub Username: ${intern.gitHub}</li>
+            </ul>
+    </div>
+    `
+    finalHTML(internSection);
 }
 
 function finalHTML(managerSection, engineerSection, internSection){
@@ -180,12 +195,9 @@ function finalHTML(managerSection, engineerSection, internSection){
 
     ${engineerSection}
 
-    ${internSection}
-
-    
+    ${internSection}  
 </body>
 </html>
-    
     `
     generateHTML(finalHTML);
 }
@@ -202,4 +214,3 @@ function init(){
 }
 
 init();
-
