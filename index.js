@@ -1,6 +1,5 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
-const Employee = require('./lib/employee');
 const Manager = require('./lib/manager');
 const Engineer = require('./lib/engineer');
 const Intern = require('./lib/intern');
@@ -151,15 +150,20 @@ function managerHTML(manager){
     <title>Our Team</title>
 </head>
 <body>
-    <div class="card" style="width: 18rem;">
-        <div class="card-header">${managerName}</div>
-        <h6 class="card-subtitle mb-2 text-muted">${managerRole}</h6>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">ID: ${managerId}</li>
-                <li class="list-group-item">Email: ${managerEmail}</li>
-                <li class="list-group-item">Office Number: ${managerOfficeNumber}</li>
-            </ul>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">Our Team</h1>
+        </div>
     </div>
+    <div class="row d-flex justify-content-center">
+        <div class="card col-sm-8 col-md-4 col-lg-3 m-3 p-4" style="width: 18rem;">
+            <div class="card-header">${managerName}: ${managerRole}</div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">ID: ${managerId}</li>
+                    <li class="list-group-item">Email: <a href="mailto:">${managerEmail}</a></li>
+                    <li class="list-group-item">Office Number: ${managerOfficeNumber}</li>
+                </ul>
+        </div>
     `
     finalHTML += managerSection;
 }
@@ -171,15 +175,14 @@ function engineerHTML(engineer){
     const engineerEmail = engineer.getEmail();
     const engineerGitHub = engineer.getGitHub();
     let engineerSection = `
-    <div class="card" style="width: 18rem;">
-        <div class="card-header">${engineerName}</div>
-        <h6 class="card-subtitle mb-2 text-muted">${engineerRole}</h6>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">ID: ${engineerId}</li>
-                <li class="list-group-item">Email: ${engineerEmail}</li>
-                <li class="list-group-item">GitHub Username: ${engineerGitHub}</li>
-            </ul>
-    </div>
+        <div class="card col-sm-8 col-md-4 col-lg-3 m-3 p-4" style="width: 18rem;">
+            <div class="card-header">${engineerName}: ${engineerRole}</div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">ID: ${engineerId}</li>
+                    <li class="list-group-item">Email: <a href="mailto:">${engineerEmail}</a></li>
+                    <li class="list-group-item">GitHub Username: <a href="https://github.com/${engineerGitHub}" target="_blank">${engineerGitHub}</a></li>
+                </ul>
+        </div>
     `
     finalHTML += engineerSection;
 }
@@ -191,31 +194,31 @@ function internHTML(intern){
     const internEmail = intern.getEmail();
     const internSchool = intern.getSchool();
     let internSection = `
-    <div class="card" style="width: 18rem;">
-        <div class="card-header">${internName}</div>
-        <h6 class="card-subtitle mb-2 text-muted">${internRole}</h6>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">ID: ${internId}</li>
-                <li class="list-group-item">Email: ${internEmail}</li>
-                <li class="list-group-item">School: ${internSchool}</li>
-            </ul>
-    </div>
+        <div class="card col-sm-8 col-md-4 col-lg-3 m-3 p-4" style="width: 18rem;">
+            <div class="card-header">${internName}: ${internRole}</div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">ID: ${internId}</li>
+                    <li class="list-group-item">Email: <a href="mailto:">${internEmail}</a></li>
+                    <li class="list-group-item">School: ${internSchool}</li>
+                </ul>
+        </div>
     `
     finalHTML += internSection;
 }
 
 function writeHTML(finalHTML){
     let closingTags = `
+    </div>
 </body>
 </html>
     `
     finalHTML += closingTags;
+
     fs.writeFile("./dist/index.html", finalHTML, err => {
-        err ? console.log("Error found, try again") : ("Success!")
+        err ? console.log("Error found, try again") : console.log("Success!")
         }
     )
 }
-
 
 function init(){
     askManagerQuestions();
