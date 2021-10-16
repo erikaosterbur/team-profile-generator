@@ -9,6 +9,7 @@
 
 .card {
     background-color: rgb(187, 187, 245);
+    box-shadow: 5px 10px rgb(175, 174, 174);
 }
 
 .card-header{

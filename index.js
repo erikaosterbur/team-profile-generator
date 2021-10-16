@@ -36,7 +36,7 @@ function askManagerQuestions(){
         },
     ])
     .then(responses => {
-        const manager = new Manager (responses);
+        const manager = new Manager (responses.name, responses.id, responses.email, responses.officeNumber);
         managerHTML(manager);
         if (responses.role === "Engineer"){
             askEngineerQuestions();
@@ -78,7 +78,7 @@ function askEngineerQuestions(){
         },
     ])
     .then(responses => {
-        const engineer = new Engineer (responses);
+        const engineer = new Engineer (responses.name, responses.id, responses.email, responses.gitHub);
         engineerHTML(engineer);
         if (responses.role === "Engineer"){
             askEngineerQuestions();
@@ -120,7 +120,7 @@ function askInternQuestions(){
         },
     ])
     .then(responses => {
-        const intern = new Intern (responses);
+        const intern = new Intern (responses.name, responses.id, responses.email, responses.school);
         internHTML(intern);
         if (responses.role === "Engineer"){
             askEngineerQuestions();
