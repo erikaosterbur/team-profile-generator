@@ -1,4 +1,4 @@
-# Homework 10: Team Profile Generator
+# Team Profile Generator
 
 ## Objectives
 Build a Node.js command-line application that takes in information about employees and generates an HTML page with summaries for each employee. 
